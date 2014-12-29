@@ -185,24 +185,18 @@ public class SolrWildCardSinhalaWordParser {
         }
     }
     
+    // if there is no error at parsing, this gives true
     public boolean isPossibleToParse(String word) {
         try {
             String encoded = encode(word);
             String decoded = decode(encoded);
-            return (word.equals(decoded));
+            
+            if(encoded == null || decoded == null) return false;
+            
+            return true;
         } catch(Exception e) {
             return false;
         }
     }
     
-    public static void main(String[] args) throws IOException{
-        int no = 0;
-        SolrWildCardSinhalaWordParser x = new SolrWildCardSinhalaWordParser();
-        BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
-        String w;
-        while((w = br.readLine()) != null) {
-            x.check("කේව්‍යාගෝ", ++no);
-        }
-        
-    }
 }

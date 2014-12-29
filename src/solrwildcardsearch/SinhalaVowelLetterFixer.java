@@ -19,6 +19,8 @@ public class SinhalaVowelLetterFixer {
     private String lastLetter;
     private String lastVowelSign;
     
+    private final boolean debug = false;
+    
     private static final String sinhalaChars[] = {"අ", "ආ", "ඇ", "ඈ", "ඉ", "ඊ", "උ", "ඌ", "ඍ", "ඎ", "ඏ",
                              "ඐ", "එ", "ඒ", "ඓ", "ඔ", "ඕ", "ඖ", "ක", "ඛ", "ග", "ඝ", "ඞ", "ඟ",
                              "ච", "ඡ", "ජ", "ඣ", "ඤ", "ඥ", "ඦ", "ට", "ඨ", "ඩ", "ඪ", "ණ", "ඬ", "ත", "ථ", "ද",
@@ -107,7 +109,7 @@ public class SinhalaVowelLetterFixer {
     
     private void appendChar(String c) {
         if(c.length() > 1) {
-            System.out.println("Char length should be 1 : " + c);
+            if(debug) System.out.println("Char length should be 1 : " + c);
             System.exit(-1);
         }
         
@@ -118,7 +120,7 @@ public class SinhalaVowelLetterFixer {
         }
         else if(isSinhalaVowelSign(c)) {
             if(lastLetter.equals("")) {
-                System.out.println("Error : First letter can't be a vowel sign : " + c);
+                if(debug) System.out.println("Error : First letter can't be a vowel sign : " + c);
                 return;
             }
             if(lastVowelSign.equals("")) {
@@ -135,7 +137,8 @@ public class SinhalaVowelLetterFixer {
                              lastVowelSign += c;
                          }
                          else {
-                             System.out.println("Error : can't fix " + lastVowelSign + " + " + c);
+                             if(debug) System.out.println("Error : can't fix " + lastVowelSign + " + " + c);
+                             return;
                          }
                          return;
                      }
@@ -182,24 +185,6 @@ public class SinhalaVowelLetterFixer {
     // take only first vowel sign if consecutive unsolvable vowel signs present
     private void setAppendUnresolvedConsecutiveVowelChars(boolean val) {
         appendUnresolvedConsecutiveVowelChars = val;
-    }
-    
-    private void TestFixer() throws IOException{
-        BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/word.csv"));
-        String line;
-        
-        while((line = br.readLine()) != null) {
-            appendText(line);
-            String fixed = getFixedText();
-            clear();
-            if(!line.equals(fixed)) {
-                System.out.println(line);
-                Util.printUnicodeElements(line);
-                Util.printUnicodeElements(fixed);
-                System.out.println("----------------");
-            }
-        }
-        br.close();
     }
     
     //
