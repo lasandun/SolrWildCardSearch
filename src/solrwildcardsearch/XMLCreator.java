@@ -21,7 +21,7 @@ import org.codehaus.stax2.XMLOutputFactory2;
  *
  * @author lahiru
  */
-public class SolrXMLCreator {
+public class XMLCreator {
 
     private final int MAX_WORD_OF_FILE = 100000;
     private OMFactory factory;
@@ -34,7 +34,7 @@ public class SolrXMLCreator {
     
     private boolean debug = true; // set true for debugging
     
-    public SolrXMLCreator() {
+    public XMLCreator() {
         parser = new solrwildcardsearch.WordParser();
     }
     
@@ -80,9 +80,9 @@ public class SolrXMLCreator {
                         if(debug) System.out.println("wrote" + fileCount);
                         writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
                     } catch (FileNotFoundException ex) {
-                        Logger.getLogger(SolrXMLCreator.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (XMLStreamException ex) {
-                        Logger.getLogger(SolrXMLCreator.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     fileCount++;
                     count = 0;
@@ -101,9 +101,9 @@ public class SolrXMLCreator {
                 if(debug) System.out.println("exception at line:" + line);
                 writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(SolrXMLCreator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
             } catch (XMLStreamException ex) {
-                Logger.getLogger(SolrXMLCreator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         br.close();
@@ -151,7 +151,7 @@ public class SolrXMLCreator {
     }
     
     public static void main(String[] args) throws FileNotFoundException, XMLStreamException, IOException {
-        SolrXMLCreator x = new SolrXMLCreator();
+        XMLCreator x = new XMLCreator();
         LinkedList<String> rejected = x.parseToXMLs("/home/lahiru/Desktop/words.csv");
         for(String s : rejected) {
             System.out.println(s);

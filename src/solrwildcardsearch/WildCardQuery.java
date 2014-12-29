@@ -22,11 +22,11 @@ import org.apache.axiom.om.util.AXIOMUtil;
  *
  * @author lahiru
  */
-public class SolrWildCardQuery {
+public class WildCardQuery {
     
     String serverUrl;
 
-    public SolrWildCardQuery() {
+    public WildCardQuery() {
         serverUrl = SysProperty.getProperty("solrServerURL");
     }
     
@@ -76,11 +76,11 @@ public class SolrWildCardQuery {
                 matchingList.addLast(w);
             }
         } catch (XMLStreamException ex) {
-            Logger.getLogger(SolrWildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
         } catch(MalformedURLException ex) {
-            Logger.getLogger(SolrWildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
         } catch(IOException ex) {
-            Logger.getLogger(SolrWildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
         } 
         //System.out.println("time: " + (time / 1000000));
         return matchingList;
@@ -93,14 +93,14 @@ public class SolrWildCardQuery {
                 try {
                     return URLEncoder.encode(parts[0], "UTF-8");
                 } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(SolrWildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             else {
                 try {
                     return (URLEncoder.encode(parts[0], "UTF-8") + "?");
                 } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(SolrWildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
             }
@@ -111,7 +111,7 @@ public class SolrWildCardQuery {
             try {
                 converted += URLEncoder.encode(parts[i], "UTF-8") + "?";
             } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(SolrWildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         converted = converted.substring(0, converted.length() - 1);
@@ -121,7 +121,7 @@ public class SolrWildCardQuery {
     
     public static void main(String[] args) throws Exception {
         String word = "මහ*";
-        SolrWildCardQuery x = new SolrWildCardQuery();
+        WildCardQuery x = new WildCardQuery();
         LinkedList<String> list = x.wildCardSearchEncoded(word, "collection1");
         System.out.println("word: " + word);
         //System.out.println("encoded: " + new SolrWildCardSinhalaWordParser().encode(word));
