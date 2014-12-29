@@ -1,8 +1,5 @@
 package solrwildcardsearch;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Hashtable;
 
 /**
@@ -25,10 +22,10 @@ public class SinhalaVowelLetterFixer {
                              "ඐ", "එ", "ඒ", "ඓ", "ඔ", "ඕ", "ඖ", "ක", "ඛ", "ග", "ඝ", "ඞ", "ඟ",
                              "ච", "ඡ", "ජ", "ඣ", "ඤ", "ඥ", "ඦ", "ට", "ඨ", "ඩ", "ඪ", "ණ", "ඬ", "ත", "ථ", "ද",
                              "ධ", "න", "ඳ", "ප", "ඵ", "බ", "භ", "ම", "ඹ", "ය", "ර", "ල", 
-                             "ව", "ශ", "ෂ", "ස", "හ", "ළ", "ෆ", "ං", "෴", "ඃ" , "\u200d"};
+                             "ව", "ශ", "ෂ", "ස", "හ", "ළ", "ෆ", "ං", "ඃ" , "\u200d" };
     
     private static final String sinhalaVowelSigns[] = {"්", "ා", "ැ", "ෑ", "ි", "ී", "ු", "ූ", "ෘ", "ෙ", "ේ", "ෛ", "ො", "ෝ",
-                              "ෞ", "ෟ", "ෲ", "ෳ" };
+                              "ෞ", "ෟ", "ෲ", "ෳ", "෴" };
     
     private final Hashtable<String, String> vowelSignMap;
     

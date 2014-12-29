@@ -39,9 +39,6 @@ public class WildCardWordListCreator {
     }
     
     private void initDoc() {
-        fileCount          = 0;
-        rejectedWordsCount = 0;
-        acceptedWordCount  = 0;
         factory = OMAbstractFactory.getOMFactory();
         root    = factory.createOMElement(new QName("root"));
         add     = factory.createOMElement(new QName("add"));
@@ -52,55 +49,57 @@ public class WildCardWordListCreator {
      * from a given text file.
      */
     public LinkedList<String> parseToXMLs(String file) throws IOException {
-        //  reset the XML dom
-        initDoc();
+        
+        initDoc(); //  reset the XML dom
+        fileCount          = 0;
+        rejectedWordsCount = 0;
+        acceptedWordCount  = 0;
         
         int count = 0;
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line;
         LinkedList<String> rejectedWords = new LinkedList<String>();
         
-        int tempID = 0;
+//        int tempID = 0;
         
         while((line = br.readLine()) != null) {
-            // tokenize and read data from file
-            line = line.replaceAll(" ", "");
-            line = line.replaceAll("\"", "");
-            String parts[] = line.split(",");
-            String id   = parts[0];
-            String word = parts[1];
-            String freq = parts[2];
-//            String word = line;
-//            String id = String.format("%06d", tempID++);
-//            String freq = "1";
-            
-            // possibel to parse
-            if(!parser.isPossibleToParse(word)) {
-                if(debug) System.out.println(word);
-                rejectedWordsCount++;
-                rejectedWords.addLast(id + " -- " + word + " -- " + freq);
-                continue;
-            }
-            
-            addWord(id, word, freq);
-            ++count;
-            acceptedWordCount++;
-            
-            // create doc of 'MAX_WORD_OF_FILE' or less words
-            if(count > MAX_WORD_OF_FILE) {
-                try {
-                    if(debug) System.out.println("wrote" + fileCount);
-                    writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (XMLStreamException ex) {
-                    Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
+            try{
+                // tokenize and read data from file
+                line = line.replaceAll(" ", "");
+                line = line.replaceAll("\"", "");
+                String parts[] = line.split(",");
+                String id   = parts[0];
+                String word = parts[1];
+                String freq = parts[2];
+    //            String word = line;
+    //            String id = String.format("%06d", tempID++);
+    //            String freq = "1";
+
+                addWord(id, word, freq);
+                ++count;
+                acceptedWordCount++;
+
+                // create doc of 'MAX_WORD_OF_FILE' or less words
+                if(count > MAX_WORD_OF_FILE) {
+                    try {
+                        if(debug) System.out.println("wrote" + fileCount);
+                        writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (XMLStreamException ex) {
+                        Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    fileCount++;
+                    count = 0;
+                    initDoc();
                 }
-                fileCount++;
-                count = 0;
-                initDoc();
+            } catch(Exception e) {
+                System.out.println("exception:" + line);
+                rejectedWordsCount++;
+                rejectedWords.addLast(line);
             }
         }
+        
         
         // emptying the buffered data by writing them to a file
         if(count != 0) {

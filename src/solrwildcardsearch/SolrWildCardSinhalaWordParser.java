@@ -15,12 +15,12 @@ public class SolrWildCardSinhalaWordParser {
                              "ඐ", "එ", "ඒ", "ඓ", "ඔ", "ඕ", "ඖ", "ක", "ඛ", "ග", "ඝ", "ඞ", "ඟ",
                              "ච", "ඡ", "ජ", "ඣ", "ඤ", "ඥ", "ඦ", "ට", "ඨ", "ඩ", "ඪ", "ණ", "ඬ", "ත", "ථ", "ද",
                              "ධ", "න", "ඳ", "ප", "ඵ", "බ", "භ", "ම", "ඹ", "ය", "ර", "ල", 
-                             "ව", "ශ", "ෂ", "ස", "හ", "ළ", "ෆ", "ං" , "\u200d"};
+                             "ව", "ශ", "ෂ", "ස", "හ", "ළ", "ෆ", "ං", "ඃ", "\u200d" };
     
     private final String sinhalaVowelSigns[] = {"්", "ා", "ැ", "ෑ", "ි", "ී", "ු", "ූ", "ෘ", "ෙ", "ේ", "ෛ", "ො", "ෝ",
                               "ෞ", "ෟ", "ෲ", "ෳ", "෴" };
     
-    private final String visargayaSign = "ඃ";
+    //private final String visargayaSign = "ඃ";
     
     private final String letterSeparator = "a";
     
@@ -62,16 +62,6 @@ public class SolrWildCardSinhalaWordParser {
         return -1;
     }
     
-    private boolean  isSinhalaVisargayaLetter(String c) {
-        if(c.length() > 1) {
-            System.out.println("char length should be 1 : " + c);
-            System.out.println("Exiting...");
-            System.exit(-1);
-        }
-        if(c.equals(visargayaSign)) return true;
-        return false;
-    }
-    
     public String encode(String str) {
         str = fixVowels(str);
         String parts[] = str.split("");
@@ -106,19 +96,11 @@ public class SolrWildCardSinhalaWordParser {
                 continue;
             }
             
-            else if(isSinhalaVisargayaLetter(c)) {
-                SinhalaLetter last = letterList.getLast();
-                last.setVisargayaSign(true);
-                continue;
-            }
-            
             else { // handle non-sinhala chars
                 SinhalaLetter nonSinhalaLetter = new SinhalaLetter();
                 nonSinhalaLetter.setNonSinhalaChar(c);
                 letterList.addLast(nonSinhalaLetter);
                 continue;
-                /*System.out.println("Error char :" + c);
-                System.exit(-1);*/
             }
         }
         
@@ -157,17 +139,15 @@ public class SolrWildCardSinhalaWordParser {
             int sinhalaLetter;
             int sinhalaVowelSign;
             
-            sinhalaLetter = val / 1000;
-            val = val % 1000;
+            sinhalaLetter = val / 100;
+            val = val % 100;
             decoded += sinhalaChars[sinhalaLetter - 1];
             
-            sinhalaVowelSign = val /  10;
+            sinhalaVowelSign = val;//
             if(sinhalaVowelSign > 0) {
                 decoded += sinhalaVowelSigns[sinhalaVowelSign - 1];
             }
-            val = val % 10;
             
-            if(val > 0) decoded += visargayaSign;
         }
         
         return decoded;
@@ -185,17 +165,22 @@ public class SolrWildCardSinhalaWordParser {
         }
     }
     
-    // if there is no error at parsing, this gives true
-    public boolean isPossibleToParse(String word) {
-        try {
-            String encoded = encode(word);
-            String decoded = decode(encoded);
-            
-            if(encoded == null || decoded == null) return false;
-            
-            return true;
-        } catch(Exception e) {
-            return false;
+    public static void main(String[] args) throws IOException {
+        SolrWildCardSinhalaWordParser x = new SolrWildCardSinhalaWordParser();
+        BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
+        String line;
+        while((line = br.readLine()) != null) {
+            String w = line;
+            String e = x.encode(w);
+            String d = x.decode(e);
+            if(!w.equals(d)) {
+                System.out.println(w);
+                System.out.println(e);
+                System.out.println(d);
+            }
+            else {
+                System.out.println("ok");
+            }
         }
     }
     

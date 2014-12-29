@@ -6,7 +6,6 @@ package solrwildcardsearch;
  */
 public class SinhalaLetter {
     
-    private boolean visargaya;
     private int sinhalaLetter;
     private int sinhalaVowelSign;
     private String searchLetter;
@@ -20,7 +19,6 @@ public class SinhalaLetter {
 
     // for sinhala letters
     public SinhalaLetter(int sinhalaLetter) {
-        visargaya = false;
         sinhalaVowelSign = 0;
         this.sinhalaLetter = sinhalaLetter + 1;
         searchLetter = null;
@@ -29,7 +27,6 @@ public class SinhalaLetter {
     
     // for non-sinhala chars
     public SinhalaLetter() {
-        visargaya = false;
         sinhalaLetter = -1;
         sinhalaVowelSign = -1;
         searchLetter = null;
@@ -60,14 +57,9 @@ public class SinhalaLetter {
         this.sinhalaVowelSign = sinhalaVowelSignIndex + 1;
     }
     
-    public void setVisargayaSign(boolean visargaya) {
-        this.visargaya = visargaya;
-    }
-    
     public String getValue() {
         String val = "";
-        int visargayaVal = visargaya ? 1 : 0;
-        val = String.format("%02d", sinhalaLetter) + String.format("%02d", sinhalaVowelSign) + visargayaVal;
+        val = String.format("%02d", sinhalaLetter) + String.format("%02d", sinhalaVowelSign);
         return val;
     }
     
