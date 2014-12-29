@@ -169,18 +169,9 @@ public class SolrWildCardSinhalaWordParser {
         SolrWildCardSinhalaWordParser x = new SolrWildCardSinhalaWordParser();
         BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
         String line;
+        int n = 0;
         while((line = br.readLine()) != null) {
-            String w = line;
-            String e = x.encode(w);
-            String d = x.decode(e);
-            if(!w.equals(d)) {
-                System.out.println(w);
-                System.out.println(e);
-                System.out.println(d);
-            }
-            else {
-                System.out.println("ok");
-            }
+            x.check(line, ++n);
         }
     }
     

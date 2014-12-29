@@ -28,11 +28,11 @@ public class WildCardWordListCreator {
     private OMElement root;
     private OMElement add;
     private int fileCount;
-    private int rejectedWordsCount;
-    private int acceptedWordCount;
+    public int rejectedWordsCount;
+    public int acceptedWordCount;
     private SolrWildCardSinhalaWordParser parser;
     
-    private boolean debug = false; // set true for debugging
+    private boolean debug = true; // set true for debugging
     
     public WildCardWordListCreator() {
         parser = new solrwildcardsearch.SolrWildCardSinhalaWordParser();
@@ -60,8 +60,6 @@ public class WildCardWordListCreator {
         String line;
         LinkedList<String> rejectedWords = new LinkedList<String>();
         
-//        int tempID = 0;
-        
         while((line = br.readLine()) != null) {
             try{
                 // tokenize and read data from file
@@ -71,9 +69,6 @@ public class WildCardWordListCreator {
                 String id   = parts[0];
                 String word = parts[1];
                 String freq = parts[2];
-    //            String word = line;
-    //            String id = String.format("%06d", tempID++);
-    //            String freq = "1";
 
                 addWord(id, word, freq);
                 ++count;
@@ -94,12 +89,11 @@ public class WildCardWordListCreator {
                     initDoc();
                 }
             } catch(Exception e) {
-                System.out.println("exception:" + line);
+                if(debug) System.out.println("exception at line:" + line);
                 rejectedWordsCount++;
                 rejectedWords.addLast(line);
             }
         }
-        
         
         // emptying the buffered data by writing them to a file
         if(count != 0) {
@@ -112,8 +106,10 @@ public class WildCardWordListCreator {
             }
         }
         br.close();
-        System.out.println("accepted: " + acceptedWordCount);
-        System.out.println("rejected: " + rejectedWordsCount);
+        if(debug) {
+            System.out.println("total accepted words: " + acceptedWordCount);
+            System.out.println("total rejected words: " + rejectedWordsCount);
+        }
         return rejectedWords;
     }
     
@@ -156,8 +152,8 @@ public class WildCardWordListCreator {
     public static void main(String[] args) throws FileNotFoundException, XMLStreamException, IOException {
         WildCardWordListCreator x = new WildCardWordListCreator();
         LinkedList<String> rejected = x.parseToXMLs("/home/lahiru/Desktop/words.csv");
-//        for(String s : rejected) {
-//            System.out.println(s);
-//        }
+        for(String s : rejected) {
+            System.out.println(s);
+        }
     }
 }
