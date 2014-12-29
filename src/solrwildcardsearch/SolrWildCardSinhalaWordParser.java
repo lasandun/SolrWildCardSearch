@@ -185,6 +185,16 @@ public class SolrWildCardSinhalaWordParser {
         }
     }
     
+    public boolean isPossibleToParse(String word) {
+        try {
+            String encoded = encode(word);
+            String decoded = decode(encoded);
+            return (word.equals(decoded));
+        } catch(Exception e) {
+            return false;
+        }
+    }
+    
     public static void main(String[] args) throws IOException{
         int no = 0;
         SolrWildCardSinhalaWordParser x = new SolrWildCardSinhalaWordParser();
