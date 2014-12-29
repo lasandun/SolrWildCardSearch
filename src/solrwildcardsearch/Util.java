@@ -77,6 +77,11 @@ public class Util {
         return inputStream;
     }
     
+    public static InputStream deleteAllXMLs(String dir) throws IOException {
+        String command = "rm " + Util.refactorDirPath(dir) + "*.xml";
+        return runCommand(command);
+    }
+    
     public static String readFileContent(String path) {
         String line;
         String content = "";

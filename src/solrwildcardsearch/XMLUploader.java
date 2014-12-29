@@ -54,18 +54,6 @@ public class XMLUploader {
         }
         return true;
     }
-        
-    // delete all of a given core of solr
-    public void clearSolrCollection(String collection) {
-        try {
-            URL query = new URL("http://localhost:8983/solr/" + collection + 
-                                "/update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&commit=true");
-            query.openConnection();
-        } catch (IOException ex) {
-            System.out.println("Error while crealing Solr database");
-            Logger.getLogger(XMLUploader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
     public static void main(String[] args) {
         try {
