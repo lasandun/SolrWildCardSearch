@@ -22,7 +22,7 @@ public class SolrWildCardSinhalaWordParser {
     
     //private final String visargayaSign = "ඃ";
     
-    private final String letterSeparator = "a";
+    private final String letterSeparator = "\u0D80";
     
     private final SinhalaVowelLetterFixer vowelFixer;
     

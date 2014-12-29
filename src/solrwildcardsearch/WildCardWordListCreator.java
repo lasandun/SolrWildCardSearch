@@ -98,6 +98,7 @@ public class WildCardWordListCreator {
         // emptying the buffered data by writing them to a file
         if(count != 0) {
             try {
+                if(debug) System.out.println("exception at line:" + line);
                 writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
