@@ -31,7 +31,7 @@ public class SolrWildCardQuery {
     }
     
     LinkedList<String> wildCardSearchEncoded(String word, String collection) {
-        String encoded = new SolrWildCardSinhalaWordParser().encode(word);
+        String encoded = new WordParser().encode(word);
         String query = "select?q=encoded:" + encoded + "&fl=content&rows=1400000";
         LinkedList<String> wordList = execQuery(query, collection);
         return wordList;

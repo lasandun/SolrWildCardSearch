@@ -9,7 +9,7 @@ import java.util.LinkedList;
  *
  * @author lahiru
  */
-public class SolrWildCardSinhalaWordParser {
+public class WordParser {
     
     private final String sinhalaChars[] = {"අ", "ආ", "ඇ", "ඈ", "ඉ", "ඊ", "උ", "ඌ", "ඍ", "ඎ", "ඏ",
                              "ඐ", "එ", "ඒ", "ඓ", "ඔ", "ඕ", "ඖ", "ක", "ඛ", "ග", "ඝ", "ඞ", "ඟ",
@@ -26,7 +26,7 @@ public class SolrWildCardSinhalaWordParser {
     
     private final SinhalaVowelLetterFixer vowelFixer;
     
-    public SolrWildCardSinhalaWordParser() {
+    public WordParser() {
         vowelFixer = new SinhalaVowelLetterFixer();
     }
     
@@ -166,7 +166,7 @@ public class SolrWildCardSinhalaWordParser {
     }
     
     public static void main(String[] args) throws IOException {
-        SolrWildCardSinhalaWordParser x = new SolrWildCardSinhalaWordParser();
+        WordParser x = new WordParser();
         BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
         String line;
         int n = 0;

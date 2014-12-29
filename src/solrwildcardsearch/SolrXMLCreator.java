@@ -21,7 +21,7 @@ import org.codehaus.stax2.XMLOutputFactory2;
  *
  * @author lahiru
  */
-public class WildCardWordListCreator {
+public class SolrXMLCreator {
 
     private final int MAX_WORD_OF_FILE = 100000;
     private OMFactory factory;
@@ -30,12 +30,12 @@ public class WildCardWordListCreator {
     private int fileCount;
     public int rejectedWordsCount;
     public int acceptedWordCount;
-    private SolrWildCardSinhalaWordParser parser;
+    private WordParser parser;
     
     private boolean debug = true; // set true for debugging
     
-    public WildCardWordListCreator() {
-        parser = new solrwildcardsearch.SolrWildCardSinhalaWordParser();
+    public SolrXMLCreator() {
+        parser = new solrwildcardsearch.WordParser();
     }
     
     private void initDoc() {
@@ -80,9 +80,9 @@ public class WildCardWordListCreator {
                         if(debug) System.out.println("wrote" + fileCount);
                         writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
                     } catch (FileNotFoundException ex) {
-                        Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(SolrXMLCreator.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (XMLStreamException ex) {
-                        Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(SolrXMLCreator.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     fileCount++;
                     count = 0;
@@ -101,9 +101,9 @@ public class WildCardWordListCreator {
                 if(debug) System.out.println("exception at line:" + line);
                 writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SolrXMLCreator.class.getName()).log(Level.SEVERE, null, ex);
             } catch (XMLStreamException ex) {
-                Logger.getLogger(WildCardWordListCreator.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SolrXMLCreator.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         br.close();
@@ -151,7 +151,7 @@ public class WildCardWordListCreator {
     }
     
     public static void main(String[] args) throws FileNotFoundException, XMLStreamException, IOException {
-        WildCardWordListCreator x = new WildCardWordListCreator();
+        SolrXMLCreator x = new SolrXMLCreator();
         LinkedList<String> rejected = x.parseToXMLs("/home/lahiru/Desktop/words.csv");
         for(String s : rejected) {
             System.out.println(s);
