@@ -90,7 +90,15 @@ public class SolrWildCardSearch {
     
     public static void main(String[] args) throws IOException, Exception { 
         SolrWildCardSearch x = new SolrWildCardSearch();
-        x.updateSolrCore("academic");
+        
+        
+//        x.updateSolrCore("news");
+        
+        
+        LinkedList<String> list = x.searchWord("විසි*", "news", true);
+        for(String s : list) {
+            System.out.println(s);
+        }
     }
     
 }

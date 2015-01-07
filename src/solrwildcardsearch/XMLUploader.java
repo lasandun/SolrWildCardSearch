@@ -15,12 +15,13 @@ public class XMLUploader {
     private final String solrPostJarPath;
     private final String xmlDir;
     
-    private final boolean debug = false;
+    private final boolean debug;
     
     public XMLUploader() {
         java            = SysProperty.getProperty("java");
         solrPostJarPath = SysProperty.getProperty("solrPostJarPath");
         xmlDir          = SysProperty.getProperty("parsedXMLPath");
+        debug = SysProperty.getProperty("debug").equals("yes");
     }
     
     /*

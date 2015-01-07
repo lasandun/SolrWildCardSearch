@@ -16,17 +16,17 @@ public class WordParser {
     
     private final String sinhalaVowelSigns[] = {"්", "ා", "ැ", "ෑ", "ි", "ී", "ු", "ූ", "ෘ", "ෙ", "ේ", "ෛ", "ො", "ෝ",
                               "ෞ", "ෟ", "ෲ", "ෳ", "෴" };
-    
-    //private final String visargayaSign = "ඃ";
-    
-    private final String letterSeparator = "#";//\u0D80";
+        
+    private final String letterSeparator;
     
     private final SinhalaVowelLetterFixer vowelFixer;
     
-    private boolean debug = false;
+    private final boolean debug;
     
     public WordParser() {
         vowelFixer = new SinhalaVowelLetterFixer();
+        letterSeparator = SysProperty.getProperty("solrWildcardEncodedLetterSeparator");
+        debug = SysProperty.getProperty("debug").equals("yes");
     }
     
     private String fixVowels(String str) {

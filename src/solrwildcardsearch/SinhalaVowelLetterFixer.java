@@ -16,7 +16,7 @@ public class SinhalaVowelLetterFixer {
     private String lastLetter;
     private String lastVowelSign;
     
-    private final boolean debug = false;
+    private final boolean debug;
     
     private static final String sinhalaChars[] = {"අ", "ආ", "ඇ", "ඈ", "ඉ", "ඊ", "උ", "ඌ", "ඍ", "ඎ", "ඏ",
                              "ඐ", "එ", "ඒ", "ඓ", "ඔ", "ඕ", "ඖ", "ක", "ඛ", "ග", "ඝ", "ඞ", "ඟ",
@@ -40,6 +40,7 @@ public class SinhalaVowelLetterFixer {
         vowelSignMap = new Hashtable<String, String>();
         initVowelSignMap();
         appendUnresolvedConsecutiveVowelChars = true;
+        debug = SysProperty.getProperty("debug").equals("yes");
     }
     
     private void initVowelSignMap() {

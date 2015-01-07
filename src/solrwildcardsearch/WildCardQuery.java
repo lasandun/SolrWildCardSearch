@@ -3,9 +3,11 @@ package solrwildcardsearch;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -37,7 +39,11 @@ public class WildCardQuery {
     
     // simple wildcard search using solr
     public LinkedList<String> wildCardSearch(String word, String core) {
-        //word = URLEncoder.encode(word, "UTF-8");
+        try {
+            word = URLEncoder.encode(word, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String query = "select?q=content:" + word + "&fl=content&rows=1400000";
         LinkedList<String> wordList = execQuery(query, core);
         return wordList;
@@ -46,11 +52,9 @@ public class WildCardQuery {
     // execute given query and return result word list
     private LinkedList<String> execQuery(String q, String core) {
         LinkedList<String> matchingList = new LinkedList<String>();
-        long time = -1;
         try {
             // create connection and query to Solr Server
             URL query = new URL(serverUrl + "solr/" + core + "/" + q);
-            time = System.nanoTime();
             URLConnection connection = query.openConnection();
             BufferedReader inputStream = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
             String line;
@@ -60,16 +64,13 @@ public class WildCardQuery {
                 content += line;
             }
             inputStream.close();
-            time = System.nanoTime() - time;
             // read the query time from the xml file
             OMElement documentElement = AXIOMUtil.stringToOM(content);
             OMElement resultDoc = documentElement.getFirstChildWithName(new QName("result"));
-            Iterator childElem = resultDoc.getChildElements();
-            while(childElem.hasNext()) {
-                OMElement strDoc = (OMElement) childElem.next();
-                // add word to list
-                Iterator strIter = strDoc.getChildElements();
-                OMElement word = (OMElement) strIter.next();
+            Iterator docDocIter = resultDoc.getChildElements();
+            while(docDocIter.hasNext()) {
+                OMElement docDoc = (OMElement) docDocIter.next();
+                OMElement word = docDoc.getFirstChildWithName(new QName("str"));
                 String w = word.getText();
                 matchingList.addLast(w);
             }
