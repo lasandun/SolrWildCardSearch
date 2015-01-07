@@ -1,15 +1,55 @@
 package solrwildcardsearch;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.LinkedList;
+
 /**
  *
  * @author lahiru
  */
 public class SolrWildCardSearch {
-
+    
     /**
-     * @param args the command line arguments
+     * Creates solr syntaxed xml files from given words.csv file.
+     * Output XML file directory path property - solrWildcardXMLPath 
+     * Input CSV file path property - solrWildcardWordListPath
+     * @return Returns a list of rejected words
+     * @throws IOException 
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public LinkedList<String> createXMLs() throws IOException {
+        XMLCreator x = new XMLCreator();
+        LinkedList<String> rejectedWords = x.parseToXMLs();
+        return rejectedWords;
+    }
+    
+    /**
+     * Uploads xml files at directory property - parsedXMLPath
+     * Uses support of solr/example/post.jar - solrPostJarPath
+     * Summary of post.jar written to summary file - solrWildcardUploadSummaryFile
+     * @param solrCore core the data to be sent
+     * @throws IOException 
+     */
+    public void uploadXMLsToSolr(String solrCore) throws IOException {
+        // creates summary file for appending
+        File summaryFile = new File(SysProperty.getProperty("solrWildcardUploadSummaryFile"));
+        PrintWriter writer = new PrintWriter(new FileOutputStream(summaryFile, true));
+        XMLUploader uploader = new XMLUploader();
+        writer.write("----------------------------------------------");
+        writer.write("\nuploading starts...\ntime: " + new Date().toString() + "\n\n");
+        
+        String summary = uploader.uploadXMLs(solrCore); // upload xml files
+        
+        writer.write(summary);
+        writer.flush();
+        writer.close();
+    }
+    
+    public static void main(String[] args) throws IOException {
+        SolrWildCardSearch x = new SolrWildCardSearch();
+        x.uploadXMLsToSolr("academic");
     }
 }

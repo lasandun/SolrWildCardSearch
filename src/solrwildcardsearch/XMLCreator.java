@@ -31,11 +31,15 @@ public class XMLCreator {
     public int rejectedWordsCount;
     public int acceptedWordCount;
     private WordParser parser;
+    private final String outputXMLDirPath;
+    private final String inputCVSFilePath;
     
-    private final boolean debug = true; // set true for debugging
+    private final boolean debug = false; // set true for debugging
     
     public XMLCreator() {
         parser = new solrwildcardsearch.WordParser();
+        outputXMLDirPath = SysProperty.getProperty("solrWildcardXMLPath");
+        inputCVSFilePath = SysProperty.getProperty("solrWildcardWordListPath");
     }
     
     private void initDoc() {
@@ -48,7 +52,7 @@ public class XMLCreator {
      * create solr supported xml files which consist of words which were extracted
      * from a given text file.
      */
-    public LinkedList<String> parseToXMLs(String file) throws IOException {
+    public LinkedList<String> parseToXMLs() throws IOException {
         
         initDoc(); //  reset the XML dom
         fileCount          = 0;
@@ -56,7 +60,7 @@ public class XMLCreator {
         acceptedWordCount  = 0;
         
         int count = 0;
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        BufferedReader br = new BufferedReader(new FileReader(inputCVSFilePath));
         String line;
         LinkedList<String> rejectedWords = new LinkedList<String>();
         
@@ -78,7 +82,7 @@ public class XMLCreator {
                 if(count > MAX_WORD_OF_FILE) {
                     try {
                         if(debug) System.out.println("wrote" + fileCount);
-                        writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
+                        writeToFile(outputXMLDirPath + fileCount + ".xml");
                     } catch (FileNotFoundException ex) {
                         Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (XMLStreamException ex) {
@@ -99,7 +103,7 @@ public class XMLCreator {
         if(count != 0) {
             try {
                 if(debug) System.out.println("exception at line:" + line);
-                writeToFile("/home/lahiru/Desktop/parsed/temp" + fileCount + ".xml");
+                writeToFile(outputXMLDirPath + fileCount + ".xml");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
             } catch (XMLStreamException ex) {
@@ -150,11 +154,4 @@ public class XMLCreator {
         writer.flush();
     }
     
-    public static void main(String[] args) throws FileNotFoundException, XMLStreamException, IOException {
-        XMLCreator x = new XMLCreator();
-        LinkedList<String> rejected = x.parseToXMLs("/home/lahiru/Desktop/words.csv");
-        for(String s : rejected) {
-            System.out.println(s);
-        }
-    }
 }

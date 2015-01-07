@@ -43,7 +43,7 @@ public class WildCardQuery {
         return wordList;
     }
     
-    LinkedList<String> execQuery(String q, String collection) {
+    private LinkedList<String> execQuery(String q, String collection) {
         LinkedList<String> matchingList = new LinkedList<String>();
         long time = -1;
         try {
