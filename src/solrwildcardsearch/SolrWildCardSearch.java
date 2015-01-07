@@ -15,6 +15,13 @@ import java.util.logging.Logger;
  */
 public class SolrWildCardSearch {
     
+    private PrintWriter writer;
+    
+    private void writeLine(String s) {
+        writer.write(s + "\n");
+        writer.flush();
+    }
+    
     /**
      * This mehod updates the given solr core with new data
      * Creates solr syntaxed xml files from given words.csv file.
@@ -29,41 +36,40 @@ public class SolrWildCardSearch {
     public void updateSolrCore(String solrCore) throws IOException {
         // creates summary file for appending
         File summaryFile = new File(SysProperty.getProperty("solrWildcardUploadSummaryFile"));
-        PrintWriter writer = new PrintWriter(new FileOutputStream(summaryFile, true));
-        writer.write("------------------------" + new Date().toString() + "----------------------\n");
-        writer.write("start updating solr core: " + solrCore + "\n");
+        writer = new PrintWriter(new FileOutputStream(summaryFile, true));
+        writeLine("------------------------" + new Date().toString() + "----------------------");
+        writeLine("start updating solr core: " + solrCore);
         
         // delete all xml files from xml directory before start creating xml files
         Util.deleteAllXMLs(SysProperty.getProperty("solrWildcardXMLPath"));
-        writer.write("directory cleared: " + SysProperty.getProperty("solrWildcardXMLPath") + "\n");
+        writeLine("directory cleared: " + SysProperty.getProperty("solrWildcardXMLPath"));
         
         // create xml files
-        writer.write("creating xml files...");
+        writeLine("creating xml files...");
         XMLCreator x = new XMLCreator();
         LinkedList<String> rejectedWords = x.parseToXMLs();
-        writer.write("done.\n\nrejected words:\n");
+        writeLine("\n\nrejected words:");
         for(String word : rejectedWords) {
-            writer.write(word + "\n");
+            writeLine(word);
         }
-        writer.write("\n");
+        writeLine("");
         
         // clear the given core before uploading new data
         try {
             Util.clearSolrDataAndIndexes(solrCore);
-            writer.write("solr core cleared: " + solrCore + "\n");
+            writeLine("solr core cleared: " + solrCore + "\n");
         } catch (Exception ex) {
             Logger.getLogger(SolrWildCardSearch.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
         
         XMLUploader uploader = new XMLUploader();
-        writer.write("\nuploading starts...\n\n");
+        writeLine("\nuploading starts...\n");
         
         String summary = uploader.uploadXMLs(solrCore); // upload xml files
         
-        writer.write(summary);
-        writer.write("\nfinished successfully\n\n\n\n");
-        writer.flush();
+        writeLine(summary);
+        writeLine("finished successfully\n\n\n");
         writer.close();
     }
     
@@ -83,7 +89,7 @@ public class SolrWildCardSearch {
     
     public static void main(String[] args) throws IOException, Exception { 
         SolrWildCardSearch x = new SolrWildCardSearch();
-        x.updateSolrCore("academic");
+        x.updateSolrCore("news");
     }
     
 }

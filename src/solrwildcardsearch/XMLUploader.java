@@ -27,7 +27,8 @@ public class XMLUploader {
      * This method uploads xml files to Solr.
     */
     public String uploadXMLs(String core) throws IOException {
-        String sysVariable = " -Durl=http://localhost:8983/solr/" + core + "/update "; // check -h of post.jar
+        String serverURL = SysProperty.getProperty("solrServerURL");
+        String sysVariable = " -Durl=" + serverURL + "solr/" + core + "/update "; // check -h of post.jar
         String command = java + sysVariable + " -jar " + solrPostJarPath + " " + Util.refactorDirPath(xmlDir) + "*.xml";
         if(debug) System.out.println("command: " + command);
         Process p = Runtime.getRuntime().exec(new String[]{"bash", "-c", command});
