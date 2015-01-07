@@ -5,17 +5,9 @@
 package solrwildcardsearch;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,11 +26,13 @@ public class XMLUploader {
     public XMLUploader() {
         java            = SysProperty.getProperty("java");
         solrPostJarPath = SysProperty.getProperty("solrPostJarPath");
-        xmlDir          = SysProperty.getProperty("parsedXMLPath");
+        //xmlDir          = SysProperty.getProperty("parsedXMLPath");
+        xmlDir = "/home/lahiru/Desktop/post/";
     }
     
-    public boolean uploadXMLs() throws IOException {
-        String command = java + " -jar " + solrPostJarPath + " " + Util.refactorDirPath(xmlDir) + "*.xml";
+    public boolean uploadXMLs(String core) throws IOException {
+        String sysVariable = " -Durl=http://localhost:8983/solr/" + core + "/update "; // check -h of post.jar
+        String command = java + sysVariable + " -jar " + solrPostJarPath + " " + Util.refactorDirPath(xmlDir) + "*.xml";
         if(debug) System.out.println("command: " + command);
         Process p = Runtime.getRuntime().exec(new String[]{"bash", "-c", command});
         InputStream solrInputStream = p.getInputStream();
@@ -58,7 +52,7 @@ public class XMLUploader {
     public static void main(String[] args) {
         try {
             XMLUploader test = new XMLUploader();
-            test.uploadXMLs();
+            test.uploadXMLs("academic");
         } catch (IOException ex) {
             Logger.getLogger(XMLUploader.class.getName()).log(Level.SEVERE, null, ex);
         }
