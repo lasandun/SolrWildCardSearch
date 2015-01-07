@@ -25,9 +25,10 @@ public class SolrWildCardSearch {
     /**
      * This mehod updates the given solr core with new data
      * Creates solr syntaxed xml files from given words.csv file.
-     * Output XML file directory path property - solrWildcardXMLPath 
-     * Input CSV file path property - solrWildcardWordListPath
-     * Uploads xml files at directory property - parsedXMLPath
+     * Output XML file directory path - solrWildcardXMLPath 
+     * Input CSV file directory - solrWildcardWordListPath
+     * Input CSV file should be in the same name of the updating core
+     * Uploads xml files at directory - parsedXMLPath
      * Uses support of solr/example/post.jar - solrPostJarPath
      * Summary of post.jar written to summary file - solrWildcardUploadSummaryFile
      * @param solrCore core the data to be sent
@@ -46,7 +47,7 @@ public class SolrWildCardSearch {
         
         // create xml files
         writeLine("creating xml files...");
-        XMLCreator x = new XMLCreator();
+        XMLCreator x = new XMLCreator(solrCore);
         LinkedList<String> rejectedWords = x.parseToXMLs();
         writeLine("\n\nrejected words:");
         for(String word : rejectedWords) {
@@ -89,7 +90,7 @@ public class SolrWildCardSearch {
     
     public static void main(String[] args) throws IOException, Exception { 
         SolrWildCardSearch x = new SolrWildCardSearch();
-        x.updateSolrCore("news");
+        x.updateSolrCore("academic");
     }
     
 }

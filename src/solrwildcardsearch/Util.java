@@ -177,17 +177,4 @@ public class Util {
         } 
     }
     
-    public static void main(String[] args) throws IOException {
-//        String s = "අනුග්‍ර";
-//        System.out.println(s);
-//        printUnicodeHex(s);
-//        System.out.println("\u0dc3\u0dad\u200d\u0dad\u0dca");
-//        printUnicodeElements("සත‍ත්");
-//        printUnicodeHex("ග\u200dර");
-//        System.out.println("");
-        
-//        deleteAllXMLs(SysProperty.getProperty("parsedXMLPath"));
-        
-        showAllOfCore("academic");
-    }
 }

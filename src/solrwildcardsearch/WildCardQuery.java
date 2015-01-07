@@ -86,30 +86,5 @@ public class WildCardQuery {
         return matchingList;
     }
     
-    public static void main(String[] args) throws Exception {
-        String word = "මහි?";
-        WildCardQuery x = new WildCardQuery();
-        LinkedList<String> list = x.wildCardSearchEncoded(word, "news");
-        System.out.println("word: " + word);
-        //System.out.println("encoded: " + new SolrWildCardSinhalaWordParser().encode(word));
-        System.out.println("count: " + list.size());
-        for(String s : list) {
-            System.out.println(s);
-        }
-        
-//        BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
-//        String line;
-//        int id = 15000;
-//        PrintWriter pr = new PrintWriter("/home/lahiru/Desktop/w.csv");
-//        while((line = br.readLine()) != null) {
-//            System.out.println(line);
-//            pr.write(id + "," + line + ",1" +  "\n");
-//            id--;
-//        }
-//        br.close();
-//        pr.flush();
-//        pr.close();
-       
-    }
 }
 

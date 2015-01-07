@@ -168,16 +168,4 @@ public class WordParser {
         }
     }
     
-    public static void main(String[] args) throws IOException {
-//        WordParser x = new WordParser();
-//        BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
-//        String line;
-//        int n = 0;
-//        while((line = br.readLine()) != null) {
-//            x.check(line, ++n);
-//        }
-        
-        
-    }
-    
 }
