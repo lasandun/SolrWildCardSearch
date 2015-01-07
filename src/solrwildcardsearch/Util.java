@@ -158,6 +158,25 @@ public class Util {
         System.out.println(Integer.toHexString(("" + c).codePointAt(0)));
     }
     
+    public static void showAllOfCore(String core) {
+        try {
+            // create connection and query to Solr Server
+            URL query = new URL(SysProperty.getProperty("solrServerURL") + "solr/" + core + "/select?q=*:*");
+            URLConnection connection = query.openConnection();
+            BufferedReader inputStream = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+            String line;
+            while ((line = inputStream.readLine()) != null) {
+                String parts[] = line.split("<doc>");
+                for(String s : parts) {
+                    System.out.println(s);
+                }
+            }
+            inputStream.close();
+        } catch(IOException ex) {
+            Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
     public static void main(String[] args) throws IOException {
 //        String s = "අනුග්‍ර";
 //        System.out.println(s);
@@ -167,6 +186,8 @@ public class Util {
 //        printUnicodeHex("ග\u200dර");
 //        System.out.println("");
         
-        deleteAllXMLs(SysProperty.getProperty("parsedXMLPath"));
+//        deleteAllXMLs(SysProperty.getProperty("parsedXMLPath"));
+        
+        showAllOfCore("academic");
     }
 }
