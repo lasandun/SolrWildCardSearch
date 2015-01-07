@@ -98,6 +98,8 @@ public class XMLCreator {
                 rejectedWords.addLast(line);
             }
         }
+        rejectedWords.addLast("hello");
+        rejectedWords.addLast("bello");
         
         // emptying the buffered data by writing them to a file
         if(count != 0) {

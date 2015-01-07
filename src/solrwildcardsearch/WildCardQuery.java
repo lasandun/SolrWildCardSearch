@@ -1,9 +1,10 @@
 package solrwildcardsearch;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -39,6 +40,7 @@ public class WildCardQuery {
     
     // simple wildcard search using solr
     public LinkedList<String> wildCardSearch(String word, String core) {
+        //word = URLEncoder.encode(word, "UTF-8");
         String query = "select?q=content:" + word + "&fl=content&rows=1400000";
         LinkedList<String> wordList = execQuery(query, core);
         return wordList;
@@ -66,11 +68,8 @@ public class WildCardQuery {
             OMElement documentElement = AXIOMUtil.stringToOM(content);
             OMElement resultDoc = documentElement.getFirstChildWithName(new QName("result"));
             Iterator childElem = resultDoc.getChildElements();
-            int count = 0;
             while(childElem.hasNext()) {
                 OMElement strDoc = (OMElement) childElem.next();
-                ++count;
-                
                 // add word to list
                 Iterator strIter = strDoc.getChildElements();
                 OMElement word = (OMElement) strIter.next();
@@ -88,20 +87,28 @@ public class WildCardQuery {
     }
     
     public static void main(String[] args) throws Exception {
-        String word = "මහ*";
+        String word = "මහි?";
         WildCardQuery x = new WildCardQuery();
-//        LinkedList<String> list = x.wildCardSearchEncoded(word, "collection1");
-//        System.out.println("word: " + word);
-//        //System.out.println("encoded: " + new SolrWildCardSinhalaWordParser().encode(word));
-//        System.out.println("count: " + list.size());
-//        for(String s : list) {
-//            System.out.println(s);
-//        }
+        LinkedList<String> list = x.wildCardSearchEncoded(word, "news");
+        System.out.println("word: " + word);
+        //System.out.println("encoded: " + new SolrWildCardSinhalaWordParser().encode(word));
+        System.out.println("count: " + list.size());
+        for(String s : list) {
+            System.out.println(s);
+        }
         
-//        System.out.println(x.encodeSearchingWord("මහ??"));
-        String s = new WordParser().encode("මහ*");
-        System.out.println(s);
-        System.out.println(new WordParser().decode(s));
+//        BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
+//        String line;
+//        int id = 15000;
+//        PrintWriter pr = new PrintWriter("/home/lahiru/Desktop/w.csv");
+//        while((line = br.readLine()) != null) {
+//            System.out.println(line);
+//            pr.write(id + "," + line + ",1" +  "\n");
+//            id--;
+//        }
+//        br.close();
+//        pr.flush();
+//        pr.close();
        
     }
 }

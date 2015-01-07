@@ -1,7 +1,5 @@
 package solrwildcardsearch;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -22,7 +20,7 @@ public class WordParser {
     
     //private final String visargayaSign = "ඃ";
     
-    private final String letterSeparator = "\u0D80";
+    private final String letterSeparator = "#";//\u0D80";
     
     private final SinhalaVowelLetterFixer vowelFixer;
     
@@ -70,11 +68,10 @@ public class WordParser {
     
     public String encode(String str) {
         str = fixVowels(str);
-        String parts[] = str.split("");
         LinkedList<SinhalaLetter> letterList = new LinkedList<SinhalaLetter>();
         
-        for(int i = 1; i < parts.length; ++i) {
-            String c = parts[i];
+        for(int i = 0; i < str.length(); ++i) {
+            String c = str.charAt(i) + "";
             
             // handle * and ?
             if(c.equals("*")) {
@@ -172,13 +169,15 @@ public class WordParser {
     }
     
     public static void main(String[] args) throws IOException {
-        WordParser x = new WordParser();
-        BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
-        String line;
-        int n = 0;
-        while((line = br.readLine()) != null) {
-            x.check(line, ++n);
-        }
+//        WordParser x = new WordParser();
+//        BufferedReader br = new BufferedReader(new FileReader("/home/lahiru/Desktop/words.txt"));
+//        String line;
+//        int n = 0;
+//        while((line = br.readLine()) != null) {
+//            x.check(line, ++n);
+//        }
+        
+        
     }
     
 }

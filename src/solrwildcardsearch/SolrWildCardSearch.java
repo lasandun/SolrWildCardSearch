@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,40 +16,53 @@ import java.util.LinkedList;
 public class SolrWildCardSearch {
     
     /**
+     * This mehod updates the given solr core with new data
      * Creates solr syntaxed xml files from given words.csv file.
      * Output XML file directory path property - solrWildcardXMLPath 
      * Input CSV file path property - solrWildcardWordListPath
-     * @return Returns a list of rejected words
-     * @throws IOException 
-     */
-    public LinkedList<String> createXMLs() throws IOException {
-        // delete all xml files from xml directory before start creating xml files
-        Util.deleteAllXMLs(SysProperty.getProperty("solrWildcardXMLPath"));
-        
-        // create xml files
-        XMLCreator x = new XMLCreator();
-        LinkedList<String> rejectedWords = x.parseToXMLs();
-        return rejectedWords;
-    }
-    
-    /**
      * Uploads xml files at directory property - parsedXMLPath
      * Uses support of solr/example/post.jar - solrPostJarPath
      * Summary of post.jar written to summary file - solrWildcardUploadSummaryFile
      * @param solrCore core the data to be sent
      * @throws IOException 
      */
-    public void uploadXMLsToSolr(String solrCore) throws IOException {
+    public void updateSolrCore(String solrCore) throws IOException {
         // creates summary file for appending
         File summaryFile = new File(SysProperty.getProperty("solrWildcardUploadSummaryFile"));
         PrintWriter writer = new PrintWriter(new FileOutputStream(summaryFile, true));
+        writer.write("------------------------" + new Date().toString() + "----------------------\n");
+        writer.write("start updating solr core: " + solrCore + "\n");
+        
+        // delete all xml files from xml directory before start creating xml files
+        Util.deleteAllXMLs(SysProperty.getProperty("solrWildcardXMLPath"));
+        writer.write("directory cleared: " + SysProperty.getProperty("solrWildcardXMLPath") + "\n");
+        
+        // create xml files
+        writer.write("creating xml files...");
+        XMLCreator x = new XMLCreator();
+        LinkedList<String> rejectedWords = x.parseToXMLs();
+        writer.write("done.\n\nrejected words:\n");
+        for(String word : rejectedWords) {
+            writer.write(word + "\n");
+        }
+        writer.write("\n");
+        
+        // clear the given core before uploading new data
+        try {
+            Util.clearSolrDataAndIndexes(solrCore);
+            writer.write("solr core cleared: " + solrCore + "\n");
+        } catch (Exception ex) {
+            Logger.getLogger(SolrWildCardSearch.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        
         XMLUploader uploader = new XMLUploader();
-        writer.write("----------------------------------------------");
-        writer.write("\nuploading starts...\ntime: " + new Date().toString() + "\n\n");
+        writer.write("\nuploading starts...\n\n");
         
         String summary = uploader.uploadXMLs(solrCore); // upload xml files
         
         writer.write(summary);
+        writer.write("\nfinished successfully\n\n\n\n");
         writer.flush();
         writer.close();
     }
@@ -66,10 +81,9 @@ public class SolrWildCardSearch {
         else           return query.wildCardSearch(word, core);
     }
     
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception { 
         SolrWildCardSearch x = new SolrWildCardSearch();
-        //x.uploadXMLsToSolr("academic");
-        //x.createXMLs();
-        
+        x.updateSolrCore("academic");
     }
+    
 }

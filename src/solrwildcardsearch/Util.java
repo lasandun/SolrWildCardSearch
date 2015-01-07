@@ -63,8 +63,8 @@ public class Util {
         return xmlFileList;
     }
     
-    public static void clearSolrDataAndIndexes() throws Exception {
-        URL query = new URL("http://localhost:8983/solr/update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&commit=true");
+    public static void clearSolrDataAndIndexes(String core) throws Exception {
+        URL query = new URL("http://localhost:8983/solr/" + core + "/update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&commit=true");
         URLConnection connection = query.openConnection();
         InputStream is = connection.getInputStream();
         is.close();
