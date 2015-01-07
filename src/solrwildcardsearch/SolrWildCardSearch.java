@@ -21,6 +21,10 @@ public class SolrWildCardSearch {
      * @throws IOException 
      */
     public LinkedList<String> createXMLs() throws IOException {
+        // delete all xml files from xml directory before start creating xml files
+        Util.deleteAllXMLs(SysProperty.getProperty("solrWildcardXMLPath"));
+        
+        // create xml files
         XMLCreator x = new XMLCreator();
         LinkedList<String> rejectedWords = x.parseToXMLs();
         return rejectedWords;
@@ -50,6 +54,7 @@ public class SolrWildCardSearch {
     
     public static void main(String[] args) throws IOException {
         SolrWildCardSearch x = new SolrWildCardSearch();
-        x.uploadXMLsToSolr("academic");
+        //x.uploadXMLsToSolr("academic");
+        x.createXMLs();
     }
 }
