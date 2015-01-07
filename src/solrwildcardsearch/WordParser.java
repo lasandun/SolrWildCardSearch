@@ -26,6 +26,8 @@ public class WordParser {
     
     private final SinhalaVowelLetterFixer vowelFixer;
     
+    private boolean debug = false;
+    
     public WordParser() {
         vowelFixer = new SinhalaVowelLetterFixer();
     }
@@ -37,8 +39,10 @@ public class WordParser {
     
     private int  isASinhalaLetter(String c) {
         if(c.length() > 1) {
-            System.out.println("char length should be 1 : " + c);
-            System.exit(-1);
+            if(debug) {
+                System.out.println("char length should be 1 : " + c);
+                System.exit(-1);
+            }
         }
         for(int i = 0; i < sinhalaChars.length; ++i) {
             if(c.equals(sinhalaChars[i])) {
@@ -50,9 +54,11 @@ public class WordParser {
     
     private int  isASinhalaVowelLetter(String c) {
         if(c.length() > 1) {
-            System.out.println("char length should be 1 : " + c);
-            System.out.println("Exiting...");
-            System.exit(-1);
+            if(debug) {
+                System.out.println("char length should be 1 : " + c);
+                System.out.println("Exiting...");
+                System.exit(-1);
+            }
         }
         for(int i = 0; i < sinhalaVowelSigns.length; ++i) {
             if(c.equals(sinhalaVowelSigns[i])) {
@@ -88,7 +94,7 @@ public class WordParser {
             int vowelLetter = isASinhalaVowelLetter(c);
             if(vowelLetter >= 0) {
                 if(letterList.isEmpty()) {
-                    System.out.println("vowel char at start of the word :" + str);
+                    if(debug) System.out.println("vowel char at start of the word :" + str);
                     return null;
                 }
                 SinhalaLetter last = letterList.getLast();

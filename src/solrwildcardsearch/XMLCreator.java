@@ -32,7 +32,7 @@ public class XMLCreator {
     public int acceptedWordCount;
     private WordParser parser;
     
-    private boolean debug = true; // set true for debugging
+    private final boolean debug = true; // set true for debugging
     
     public XMLCreator() {
         parser = new solrwildcardsearch.WordParser();
