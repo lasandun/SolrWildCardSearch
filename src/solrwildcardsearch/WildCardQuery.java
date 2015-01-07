@@ -1,6 +1,5 @@
 package solrwildcardsearch;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,25 +29,28 @@ public class WildCardQuery {
         serverUrl = SysProperty.getProperty("solrServerURL");
     }
     
-    LinkedList<String> wildCardSearchEncoded(String word, String collection) {
+    // do searching using the encoded stirng. Vowel sign problems won't occur
+    public LinkedList<String> wildCardSearchEncoded(String word, String core) {
         String encoded = new WordParser().encode(word);
         String query = "select?q=encoded:" + encoded + "&fl=content&rows=1400000";
-        LinkedList<String> wordList = execQuery(query, collection);
+        LinkedList<String> wordList = execQuery(query, core);
         return wordList;
     }
     
-    LinkedList<String> wildCardSearch(String word, String collection) {
+    // simple wildcard search using solr
+    public LinkedList<String> wildCardSearch(String word, String core) {
         String query = "select?q=content:" + word + "&fl=content&rows=1400000";
-        LinkedList<String> wordList = execQuery(query, collection);
+        LinkedList<String> wordList = execQuery(query, core);
         return wordList;
     }
     
-    private LinkedList<String> execQuery(String q, String collection) {
+    // execute given query and return result word list
+    private LinkedList<String> execQuery(String q, String core) {
         LinkedList<String> matchingList = new LinkedList<String>();
         long time = -1;
         try {
             // create connection and query to Solr Server
-            URL query = new URL(serverUrl + "solr/" + collection + "/" + q);
+            URL query = new URL(serverUrl + "solr/" + core + "/" + q);
             time = System.nanoTime();
             URLConnection connection = query.openConnection();
             BufferedReader inputStream = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
@@ -81,54 +83,25 @@ public class WildCardQuery {
             Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
         } catch(IOException ex) {
             Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        //System.out.println("time: " + (time / 1000000));
+        }
         return matchingList;
     }
-    
-    private String encordeWildcardSyntaxToTURL(String word) {
-        String parts[] = word.split("\\?");
-        if(parts.length == 1) {
-            if(parts[0].length() == word.length()) {
-                try {
-                    return URLEncoder.encode(parts[0], "UTF-8");
-                } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            else {
-                try {
-                    return (URLEncoder.encode(parts[0], "UTF-8") + "?");
-                } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return null;
-            }
-        }
-        
-        String converted = "";
-        for(int i = 0; i < parts.length; ++i) {
-            try {
-                converted += URLEncoder.encode(parts[i], "UTF-8") + "?";
-            } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(WildCardQuery.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        converted = converted.substring(0, converted.length() - 1);
-        return converted;
-    }
-    
     
     public static void main(String[] args) throws Exception {
         String word = "මහ*";
         WildCardQuery x = new WildCardQuery();
-        LinkedList<String> list = x.wildCardSearchEncoded(word, "collection1");
-        System.out.println("word: " + word);
-        //System.out.println("encoded: " + new SolrWildCardSinhalaWordParser().encode(word));
-        System.out.println("count: " + list.size());
-        for(String s : list) {
-            System.out.println(s);
-        }
+//        LinkedList<String> list = x.wildCardSearchEncoded(word, "collection1");
+//        System.out.println("word: " + word);
+//        //System.out.println("encoded: " + new SolrWildCardSinhalaWordParser().encode(word));
+//        System.out.println("count: " + list.size());
+//        for(String s : list) {
+//            System.out.println(s);
+//        }
+        
+//        System.out.println(x.encodeSearchingWord("මහ??"));
+        String s = new WordParser().encode("මහ*");
+        System.out.println(s);
+        System.out.println(new WordParser().decode(s));
        
     }
 }

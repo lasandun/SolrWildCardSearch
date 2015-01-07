@@ -52,9 +52,24 @@ public class SolrWildCardSearch {
         writer.close();
     }
     
+    /**
+     * 
+     * @param word searching word (may include ? or * signs)
+     * @param core the solr core the query to be sent
+     * @param useEncoded use encoded search if the true. Else do search on sinhala word
+     * @return list of matching words
+     */
+    public LinkedList<String> searchWord(String word, String core, boolean useEncoded) {
+        WildCardQuery query = new WildCardQuery();
+        
+        if(useEncoded) return query.wildCardSearchEncoded(word, core);
+        else           return query.wildCardSearch(word, core);
+    }
+    
     public static void main(String[] args) throws IOException {
         SolrWildCardSearch x = new SolrWildCardSearch();
         //x.uploadXMLsToSolr("academic");
-        x.createXMLs();
+        //x.createXMLs();
+        
     }
 }
